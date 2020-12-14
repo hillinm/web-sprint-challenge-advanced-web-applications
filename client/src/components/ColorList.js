@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import {axiosWithAuth} from "../utils/axiosWithAuth";
-import { useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom";
 
 const initialColor = {
   color: "",
   code: { hex: "" }
 };
 
-const ColorList = ({ colors, updateColors }) => {
+const ColorList = ({ colors, updateColors, getColors }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  const history = useHistory();
 
   const editColor = color => {
     setEditing(true);
@@ -22,8 +23,10 @@ const ColorList = ({ colors, updateColors }) => {
     axiosWithAuth()
       .put(`/api/colors/${colorToEdit.id}`, colorToEdit)
       .then(res => {
+        console.log("This is saveEdit", res.data)
+        setEditing(false);
         updateColors([...colors, res.data]);
-        history.push('/bubbles/reload');
+        history.push("/bubbles/reload")
       })
       .catch(err => console.log(err.response))
   };
@@ -31,9 +34,10 @@ const ColorList = ({ colors, updateColors }) => {
   const deleteColor = color => {
     // make a delete request to delete this color
     axiosWithAuth()
-      .delete(`/api/colors/${colorToEdit.id}`, colorToEdit)
+      .delete(`/api/colors/${color.id}`)
       .then(res => {
-        history.push("bubbles/reload");
+          console.log("This is delete color", res.data)
+          history.push("/bubbles/reload");
       })
       .catch(err => console.log(err.response))
   };

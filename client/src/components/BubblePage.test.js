@@ -1,46 +1,101 @@
 import React from "react";
-import { render, queryAllByTestId } from "@testing-library/react";
-import ColorList from "./ColorList";
+import { findByText, render, screen } from "@testing-library/react";
+import BubblePage from "./BubblePage";
+import { testBubbles as mockTestBubbles } from "../utils/testBubbles";
 
-const colorData = [
+jest.mock("../utils/testBubbles")
+
+const colorData = {
+  colors: [
   {
     color: "aliceblue",
     code: {
-      hex: "#f0f8ff",
+      hex: "#f0f8ff"
     },
-    id: 1,
+    id: 1
   },
   {
     color: "limegreen",
     code: {
-      hex: "#99ddbc",
+      hex: "#99ddbc"
     },
-    id: 2,
+    id: 2
   },
   {
     color: "aqua",
     code: {
-      hex: "#00ffff",
+      hex: "#00ffff"
     },
-    id: 3,
+    id: 3
   },
   {
     color: "aquamarine",
     code: {
-      hex: "#7fffd4",
+      hex: "#7fffd4"
     },
-    id: 4,
+    id: 4
+  },
+  {
+    color: "lilac",
+    code: {
+      hex: "#9a99dd"
+    },
+    id: 5
+  },
+  {
+    color: "softpink",
+    code: {
+      hex: "#dd99ba"
+    },
+    id: 6
+  },
+  {
+    color: "bisque",
+    code: {
+      hex: "#dd9a99"
+    },
+    id: 7
+  },
+  {
+    color: "softyellow",
+    code: {
+      hex: "#dcdd99"
+    },
+    id: 8
+  },
+  {
+    color: "blanchedalmond",
+    code: {
+      hex: "#ffebcd"
+    },
+    id: 9
+  },
+  {
+    color: "blue",
+    code: {
+      hex: "#6093ca"
+    },
+    id: 10
+  },
+  {
+    color: "blueviolet",
+    code: {
+      hex: "#8a2be2"
+    },
+    id: 11
   }
-]
+  ]
+}
+
 
 test("Fetches data and renders the bubbles", async () => {
-
-  const { rerender , queryAllByTestId } = render(<ColorList colors={[]} />)
-
-  expect(queryAllByTestId(/colors/i)).toHaveLength(0);
-
-  rerender(<ColorList colors={colorData} />)
   
-  expect(queryAllByTestId(/colors/i)).toHaveLength(4)
+  mockTestBubbles.mockResolvedValue(colorData);
+
+  render(<BubblePage />);
+
+  const bubbles = findByText(/bubble/i);
+
+  expect(await bubbles).toBeInTheDocument();
 
 });
