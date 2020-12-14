@@ -1,11 +1,11 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
-import BubblePage from "./BubblePage";
 import { axiosWithAuth as mockAxiosWithAuth } from "../utils/axiosWithAuth";
+import ColorList from "./ColorList";
 
 jest.mock("../utils/axiosWithAuth.js");
 
-const colors = [
+const colorData = [
   {
     color: "aliceblue",
     code: {
@@ -37,11 +37,15 @@ const colors = [
 ]
 
 test("Fetches data and renders the bubbles", async () => {
-    mockAxiosWithAuth.mockResolvedValueOnce(colors);
-    
-    const { getByText } = render (<BubblePage />);
-    
-    expect(mockAxiosWithAuth).toHaveBeenCalledTimes(1);
 
-    await waitFor(() => expect(getByText(/aliceblue/i)).toBeInTheDocument);
+  const { rerender , queryAllByTestId } = render(<ColorList colors={[]} />)
+
+  expect(queryAllByTestId(/colors/i)).toHaveLength(0);
+
+  rerender(<ColorList colors={colorData} />)
+
+  const colors = queryAllByTestId(/colors/i)
+  
+  expect(colors).toHaveLength(4)
+
 });
