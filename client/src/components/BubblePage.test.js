@@ -1,9 +1,6 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
-import { axiosWithAuth as mockAxiosWithAuth } from "../utils/axiosWithAuth";
+import { render, queryAllByTestId } from "@testing-library/react";
 import ColorList from "./ColorList";
-
-jest.mock("../utils/axiosWithAuth.js");
 
 const colorData = [
   {
@@ -43,9 +40,7 @@ test("Fetches data and renders the bubbles", async () => {
   expect(queryAllByTestId(/colors/i)).toHaveLength(0);
 
   rerender(<ColorList colors={colorData} />)
-
-  const colors = queryAllByTestId(/colors/i)
   
-  expect(colors).toHaveLength(4)
+  expect(queryAllByTestId(/colors/i)).toHaveLength(4)
 
 });
